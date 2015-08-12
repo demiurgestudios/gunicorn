@@ -54,6 +54,15 @@ class GeventWorker(AsyncWorker):
     server_class = None
     wsgi_handler = None
 
+    @classmethod
+    def setup(cls):
+        from gevent import monkey
+        monkey.noisy = False
+        monkey.patch_all()
+
+        # monkey patch sendfile to make it none blocking
+        patch_sendfile()
+
     def patch(self):
         from gevent import monkey
         monkey.noisy = False
