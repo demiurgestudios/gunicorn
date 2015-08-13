@@ -122,6 +122,11 @@ class Arbiter(object):
         Initialize the arbiter. Start listening and set pidfile if needed.
         """
         self.log.info("Starting gunicorn %s", __version__)
+        # DS_JAZ: Reporting so we know it's the patched version.
+        self.log.info(("Demiurge gunicorn fork, gevent.monkey "
+                       "patch when using gevent workers, "
+                       "to support preload_app=True option."))
+        # /DS_JAZ:
 
         if 'GUNICORN_PID' in os.environ:
             self.master_pid = int(os.environ.get('GUNICORN_PID'))
