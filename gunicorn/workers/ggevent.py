@@ -49,6 +49,23 @@ class GeventWorker(AsyncWorker):
     server_class = None
     wsgi_handler = None
 
+    # DS_JAZ: Demiurge patch,
+    # see: https://github.com/benoitc/gunicorn/issues/927#issuecomment-130452350
+    @classmethod
+    def setup(cls):
+        from gevent import monkey
+        monkey.noisy = False
+
+        # if the new version is used make sure to patch subprocess
+        if gevent.version_info[0] == 0:
+            monkey.patch_all()
+        else:
+            monkey.patch_all(subprocess=True)
+
+        # monkey patch sendfile to make it none blocking
+        patch_sendfile()
+    # /DS_JAZ:
+
     def patch(self):
         monkey.patch_all()
 
