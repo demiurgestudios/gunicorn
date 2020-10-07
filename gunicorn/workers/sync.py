@@ -151,6 +151,7 @@ class SyncWorker(base.Worker):
                     self.log.debug("Ignoring connection reset")
                 else:
                     self.log.debug("Ignoring EPIPE")
+                self.handle_error(req, client, addr, e)
         except Exception as e:
             self.handle_error(req, client, addr, e)
         finally:
